@@ -1,18 +1,33 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Header />
+    <FilterOptions :searchterm="searchTerm" />
+    <CardsListView :list="list" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
+import { Header, FilterOptions, CardsListView } from "@/components/";
+import { getPokes } from "@/services/graphql-api/api";
 export default {
-  name: "home",
+  name: "app",
+  data() {
+    return {
+      searchTerm: "",
+      list: [],
+    };
+  },
+  async created() {
+    try {
+      this.list = await getPokes(10, 0);
+    } catch (e) {
+      console.error(e);
+    }
+  },
   components: {
-    HelloWorld
-  }
+    Header,
+    FilterOptions,
+    CardsListView,
+  },
 };
 </script>
