@@ -46,9 +46,10 @@
     ],
     "rules": {
       "comma-dangle": [
-        2,
-        "only-multiline"
-      ]
+        0,
+        "always"
+      ],
+      "no-console": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"
