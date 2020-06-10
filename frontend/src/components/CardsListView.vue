@@ -4,10 +4,18 @@
     <ul id="example-1">
       <li v-for="poke in list" :key="poke.id">
         <div>
-          <img :src="poke.image" style="width:100px" />
+          <img loading="lazy" :src="poke.image" style="width:100px" />
           {{ poke.name }}
           <p>fav:{{ poke.isFavorite }}</p>
           <p>types:{{ poke.types }}</p>
+        </div>
+      </li>
+      <li>
+        <div v-if="allLoaded">
+          <p>No more Pokes to show</p>
+        </div>
+        <div v-if="!allLoaded">
+          <p>Checking for more Pokemons</p>
         </div>
       </li>
     </ul>
@@ -34,6 +42,7 @@ ul {
 export default {
   props: {
     list: Array,
+    allLoaded: Boolean,
   },
 };
 </script>

@@ -2,21 +2,25 @@
   <div class="home">
     <Header />
     <FilterOptions :searchterm="searchTerm" />
-    <CardsListView @scroll="handleScroll" :list="list" />
+    <CardsListView @scroll="handleScroll" :list="list" :allLoaded="allLoaded" />
   </div>
 </template>
 
 <script>
+const NEW_CALL_COUNT = 18;
 import { Header, FilterOptions, CardsListView } from "@/components/";
 import { getPokes } from "@/services/graphql-api/api";
-const NEW_CALL_COUNT = 18;
+import { useIsScrolledToBottom } from "@/util";
+
 export default {
   name: "app",
   data() {
     return {
       searchTerm: "",
       pageindex: 0,
+      tab: "all",
       list: null,
+      allLoaded: false,
     };
   },
   async created() {
@@ -30,23 +34,18 @@ export default {
   methods: {
     //@TOOD turn to mixin
     handleScroll: async function() {
-      let bottomOfWindow =
-        Math.max(
-          window.pageYOffset,
-          document.documentElement.scrollTop,
-          document.body.scrollTop
-        ) +
-          window.innerHeight ===
-        document.documentElement.offsetHeight;
-
+      let bottomOfWindow = useIsScrolledToBottom(window);
       if (bottomOfWindow) {
         try {
           this.pageindex = this.pageindex + NEW_CALL_COUNT;
           let newData = await getPokes(NEW_CALL_COUNT, this.pageindex);
+          //if we have more pokes lets add them
           if (newData.length > 0) {
             let newState = new Set([...this.list, ...newData]);
             this.list = [...newState];
           } else {
+            //if no data lets stop listening to the scroll
+            this.allLoaded = true;
             window.removeEventListener("scroll", this.handleScroll);
           }
         } catch (e) {
