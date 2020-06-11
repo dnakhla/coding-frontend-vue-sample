@@ -19,7 +19,7 @@ describe("Home page", () => {
   it("checks the top tabs for change", () => {
     cy.visit("/");
     cy.contains("Favorites").click();
-    cy.get(".card").each(($el) => {
+    cy.get(".card").each($el => {
       cy.get($el).should("have.class", "isFav");
     });
   });

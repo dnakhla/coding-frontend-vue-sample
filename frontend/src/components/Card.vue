@@ -10,7 +10,7 @@
         card: true,
         detailedview: isDetailedView,
         isList: isList,
-        isFav: poke.isFavorite,
+        isFav: poke.isFavorite
       }"
       :data-id="poke.id"
       v-if="poke"
@@ -37,24 +37,20 @@
         <router-link :to="poke.name">
           <img
             :class="{
-              detailedview: isDetailedView,
+              detailedview: isDetailedView
             }"
             loading="lazy"
             :src="poke.image"
           />
         </router-link>
-        <span
-          @click="playPokeSound(poke)"
-          v-if="isDetailedView"
-          className="soundIcon"
-        >
-          <p>🔊</p>
+        <span @click="playPokeSound(poke)" v-if="isDetailedView">
+          <p className="soundIcon">🔊</p>
         </span>
       </div>
       <div
         class="bottom"
         :class="{
-          detailedview: isDetailedView,
+          detailedview: isDetailedView
         }"
       >
         <router-link :to="poke.name">
@@ -83,6 +79,17 @@
 </template>
 
 <style scoped lang="scss">
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 h2.title {
   font-size: 3rem;
 }
@@ -144,6 +151,7 @@ div.card {
       font-family: "Courier New", Courier, monospace;
     }
   }
+
   div.top {
     display: flex;
     height: 100%;
@@ -156,6 +164,15 @@ div.card {
       p {
         margin: 1rem;
         font-size: 5rem;
+        background: transparent;
+        border: 0;
+        &:hover {
+          animation: pulse 0.5s ease-in infinite;
+        }
+        &:focus,
+        &:active {
+          border: 0;
+        }
       }
     }
     img {
@@ -199,6 +216,9 @@ div.card {
       position: absolute;
       bottom: 0;
       right: 0;
+      &:hover {
+        animation: pulse 0.5s ease-in infinite;
+      }
       &:active,
       &:focus {
         border: 0;
@@ -217,13 +237,13 @@ export default {
     onFav: Function,
     onRemoveFav: Function,
     isDetailedView: Boolean,
-    isList: Boolean,
+    isList: Boolean
   },
   methods: {
-    playPokeSound: (poke) => {
+    playPokeSound: poke => {
       let audio = new Audio(poke.sound); // path to file
       audio.play();
-    },
-  },
+    }
+  }
 };
 </script>
