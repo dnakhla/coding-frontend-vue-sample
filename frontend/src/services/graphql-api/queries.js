@@ -1,30 +1,57 @@
-let simpleData = ["id", "name", "image", "types", "isFavorite"];
+let simpleDataFields = ["id", "name", "image", "types", "isFavorite"];
 export default {
-  getPokes: ({ limit, offset }) => {
+  getPokes: ({
+    limit = 18,
+    offset = 0,
+    isFavorites = false,
+    isSearch = false,
+    isType = false,
+  }) => {
+    let filters = "";
+    let search = "";
+    if (isFavorites || isType) {
+      let favsub = isFavorites ? "isFavorites: true" : "";
+      let typesub = isType ? `type: "${isType}" ` : "";
+      filters = `filter: { 
+          ${typesub}
+          ${favsub}
+       }`;
+    }
+    if (isSearch) {
+      search = `search:"${isSearch}"`;
+    }
     return `{
-          pokemons(query: { limit: ${limit}, offset: ${offset} }) {
+          pokemons(query: { limit:${limit} offset: ${offset} 
+            ${search}
+            ${filters} }) {
             list:edges {
-                 ${simpleData.join("\n")}
-            }
-          }
-        }`;
-  },
-  getFavorites: ({ limit, offset }) => {
-    return `{
-          pokemons(query: { limit: ${limit}, offset: ${offset}, filter: { isFavorite: true } }) {
-            list:edges {
-              ${simpleData.join("\n")}
+                 ${simpleDataFields.join("\n")}
             }
           }
         }`;
   },
   getPokeByName: ({ name }) => {
     return `{
-          pokemons(query: { limit: ${limit}, offset: ${offset}, filter: { isFavorite: true } }) {
-            list:edges {
-              ${simpleData.join("\n")}
+            poke:pokemonByName(name: "${name}") {
+               ${simpleDataFields.join("\n")}
             }
-          }
-        }`;
+          }`;
+  },
+  getPokeTypes: () => {
+    return `{types:pokemonTypes}`;
+  },
+  favoritePokeById: ({ id }) => {
+    return `mutation{
+            favoritePokemon(id:"${id}"){
+              ${simpleDataFields.join("\n")}
+            }
+          }`;
+  },
+  removeFavoritePokeById: ({ id }) => {
+    return `mutation{
+            unFavoritePokemon(id:"${id}"){
+              ${simpleDataFields.join("\n")}
+            }
+          }`;
   },
 };

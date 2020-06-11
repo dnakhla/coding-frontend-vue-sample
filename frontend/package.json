@@ -47,7 +47,7 @@
     "rules": {
       "comma-dangle": [
         0,
-        "always"
+        "always-multiline"
       ],
       "no-console": "off"
     },
