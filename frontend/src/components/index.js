@@ -1,4 +1,6 @@
 import Header from "./Header";
 import FilterOptions from "./FilterOptions";
 import CardsListView from "./CardsListView";
-export { Header, FilterOptions, CardsListView };
+import Card from "./Card";
+import DetailedViewFragment from "./DetailedViewFragment";
+export { Header, FilterOptions, CardsListView, Card, DetailedViewFragment };

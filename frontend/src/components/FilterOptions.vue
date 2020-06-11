@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="search">
+  <div class="container">
+    <div class="search">
       <form @submit.prevent="searchByName">
         <input
           id="namesearch"
@@ -10,7 +10,7 @@
         />
       </form>
     </div>
-    <div id="filter">
+    <div class="filter">
       <select @change="searchByType">
         <option value="All">
           All
@@ -20,7 +20,7 @@
         </option>
       </select>
     </div>
-    <div @click="handleListToggle">
+    <div class="viewsettings" @click="handleListToggle">
       <button :class="{ active: isGrid }">
         Grid
       </button>
@@ -30,10 +30,44 @@
 </template>
 
 <style scoped lang="scss">
-button {
-  width: 50%;
-  &.active {
-    background: red;
+div.container {
+  display: flex;
+  margin-bottom: 1rem;
+  div {
+    display: flex;
+    &.search {
+      flex: 1 1 100%;
+      form {
+        width: 100%;
+      }
+      input {
+        width: 100%;
+        border: 1px solid var(--faded-bg-color);
+        font-size: 1.6rem;
+        padding: 0.5rem;
+      }
+    }
+    &.filter {
+      select {
+        border: 1px solid var(--faded-bg-color);
+      }
+    }
+    &.viewsettings {
+      margin-left: 1rem;
+      button {
+        background: #fff;
+        border: none;
+        border-bottom: 2px solid #fff;
+        &:active,
+        &:focus {
+          border: 0;
+          outline: 0;
+        }
+        &.active {
+          border-bottom: 2px solid var(--primary-color);
+        }
+      }
+    }
   }
 }
 </style>
@@ -67,7 +101,6 @@ export default {
     },
     searchByType(e) {
       let selectedType = e.target.value;
-
       this.handleSearchByType(selectedType == "All" ? false : selectedType);
     },
   },

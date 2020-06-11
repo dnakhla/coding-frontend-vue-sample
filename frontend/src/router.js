@@ -9,12 +9,12 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "all",
+      name: "home",
       component: () => import("@/views/Home.vue"),
     },
     {
       path: "/:name",
-      name: "pokemon-details",
+      name: "details",
       component: () => import("@/views/Detail.vue"),
     },
   ],

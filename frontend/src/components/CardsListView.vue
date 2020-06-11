@@ -5,23 +5,20 @@
         <span>0 results</span>
       </div>
       <li v-for="poke in list" :key="poke.id">
-        <div>
-          <router-link :to="poke.name">
-            <img loading="lazy" :src="poke.image" style="width:100px" />
-          </router-link>
-          {{ poke.name }}
-          <button
-            @click="!poke.isFavorite ? onFav(poke.id) : onRemoveFav(poke.id)"
-          >
-            fav:{{ poke.isFavorite ? "❤️" : "💔" }}
-          </button>
-          <p>{{ poke.id }}</p>
-          <p>types:{{ poke.types }}</p>
-        </div>
+        <Card
+          :isList="!isGrid"
+          :onFav="onFav"
+          :onRemoveFav="onRemoveFav"
+          :poke="poke"
+        />
       </li>
       <li v-if="allLoaded">
-        <div>
-          <span>No more Pokes to show</span>
+        <div class="nomore">
+          <div>
+            <p>
+              End of List
+            </p>
+          </div>
         </div>
       </li>
     </ul>
@@ -34,24 +31,35 @@ ul {
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-gap: 1rem;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(3, 1fr);
   &.isList {
     display: flex;
     flex-wrap: wrap;
+    li {
+      width: 100%;
+    }
   }
   li {
-    display: grid;
-    width: 100%;
-    border: 1px solid saddlebrown;
-    div {
-      padding: 2rem;
+    div.nomore {
+      display: flex;
+      height: 100%;
+      div {
+        margin: auto;
+        font-size: 1.6rem;
+      }
     }
   }
 }
 </style>
 
 <script>
+import Card from "./Card";
 export default {
+  components: {
+    Card,
+  },
   props: {
     list: Array,
     isGrid: Boolean,

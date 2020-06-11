@@ -18,10 +18,21 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-button {
-  width: 50%;
-  &.active {
-    background: red;
+div {
+  margin-bottom: 1rem;
+  button {
+    width: 50%;
+    height: 5rem;
+    color: #000;
+    background: #fff;
+    border: 1px solid #10314a55;
+    font-size: 1.4rem;
+    font-weight: bold;
+    &.active {
+      background: var(--main-bg-color);
+      border: none;
+      color: #fff;
+    }
   }
 }
 </style>
