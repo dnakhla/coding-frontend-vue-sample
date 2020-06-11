@@ -13,8 +13,8 @@
 export default {
   props: {
     tab: String,
-    handleToggle: Function,
-  },
+    handleToggle: Function
+  }
 };
 </script>
 <style scoped lang="scss">

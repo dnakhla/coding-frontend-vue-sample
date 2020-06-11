@@ -15,7 +15,11 @@
         <option value="All">
           All
         </option>
-        <option v-for="option in pokeTypes" v-bind:value="option">
+        <option
+          v-for="(option, index) in pokeTypes"
+          :key="`key-${index}`"
+          :value="option"
+        >
           {{ option }}
         </option>
       </select>
@@ -79,13 +83,13 @@ export default {
     isGrid: Boolean,
     handleSearch: Function,
     handleSearchByType: Function,
-    handleListToggle: Function,
+    handleListToggle: Function
   },
   data() {
     return {
       searchterm: "",
       pokeTypes: [],
-      onSearchByType: "All",
+      onSearchByType: "All"
     };
   },
   async created() {
@@ -102,7 +106,7 @@ export default {
     searchByType(e) {
       let selectedType = e.target.value;
       this.handleSearchByType(selectedType == "All" ? false : selectedType);
-    },
-  },
+    }
+  }
 };
 </script>

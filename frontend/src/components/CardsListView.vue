@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul :class="{ isList: !isGrid }">
-      <div v-if="(list || []).length == 0">
+      <div class="noResults" v-if="(list || []).length == 0">
         <span>0 results</span>
       </div>
       <li v-for="poke in list" :key="poke.id">
@@ -34,6 +34,9 @@ ul {
   grid-gap: 1rem;
   grid-auto-flow: row;
   grid-template-columns: repeat(3, 1fr);
+  div.noResults {
+    font-size: 2rem;
+  }
   &.isList {
     display: flex;
     flex-wrap: wrap;
@@ -58,14 +61,14 @@ ul {
 import Card from "./Card";
 export default {
   components: {
-    Card,
+    Card
   },
   props: {
     list: Array,
     isGrid: Boolean,
     allLoaded: Boolean,
     onFav: Function,
-    onRemoveFav: Function,
-  },
+    onRemoveFav: Function
+  }
 };
 </script>

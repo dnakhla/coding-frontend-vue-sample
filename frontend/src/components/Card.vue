@@ -9,7 +9,7 @@
       :class="{
         card: true,
         detailedview: isDetailedView,
-        isList: isList,
+        isList: isList
       }"
       v-if="poke"
     >
@@ -35,7 +35,7 @@
         <router-link :to="poke.name">
           <img
             :class="{
-              detailedview: isDetailedView,
+              detailedview: isDetailedView
             }"
             loading="lazy"
             :src="poke.image"
@@ -52,7 +52,7 @@
       <div
         class="bottom"
         :class="{
-          detailedview: isDetailedView,
+          detailedview: isDetailedView
         }"
       >
         <router-link :to="poke.name">
@@ -71,7 +71,7 @@
       <h2 class="title">Evolutions</h2>
       <div class="evoholder">
         <Card
-          v-for="(item, index) in poke.evolutions"
+          v-for="item in poke.evolutions"
           v-bind:poke="item"
           v-bind:key="item.id"
         />
@@ -215,13 +215,13 @@ export default {
     onFav: Function,
     onRemoveFav: Function,
     isDetailedView: Boolean,
-    isList: Boolean,
+    isList: Boolean
   },
   methods: {
-    playPokeSound: (poke) => {
+    playPokeSound: poke => {
       let audio = new Audio(poke.sound); // path to file
       audio.play();
-    },
-  },
+    }
+  }
 };
 </script>

@@ -26,7 +26,7 @@ import { Header, FilterOptions, CardsListView } from "@/components/";
 import {
   getPokes,
   favoritePoke,
-  removeFavoritePoke,
+  removeFavoritePoke
 } from "@/services/graphql-api/api";
 import { useIsScrolledToBottom } from "@/util";
 
@@ -40,7 +40,7 @@ export default {
       typequery: false,
       pageindex: 0,
       list: null,
-      allLoaded: false,
+      allLoaded: false
     };
   },
   async created() {
@@ -53,10 +53,10 @@ export default {
     }
   },
   watch: {
-    tab: async function(val) {
+    tab: async function() {
       this.pageindex = 0;
       this.list = await this.runQuery();
-    },
+    }
   },
   methods: {
     runQuery: async function() {
@@ -65,7 +65,7 @@ export default {
         offset: this.pageindex,
         isSearch: this.searchquery,
         isType: this.typequery,
-        isFavorites: this.tab == "favorites",
+        isFavorites: this.tab == "favorites"
       });
     },
     onListToggle: async function() {
@@ -76,9 +76,9 @@ export default {
       this.typequery = selected;
       this.list = await this.runQuery();
     },
-    onSearch: async function(x) {
+    onSearch: async function(searchquery) {
       this.pageindex = 0;
-      this.searchquery = x;
+      this.searchquery = searchquery;
       this.list = await this.runQuery();
     },
     //@TOOD turn to mixin
@@ -102,8 +102,7 @@ export default {
           let newData = await this.runQuery();
           //if we have more pokes lets add them
           if (newData.length > 0) {
-            let newState = [...this.list, ...newData];
-            this.list = [...newState];
+            this.list = [...this.list, ...newData];
           } else {
             //if no data lets stop listening to the scroll
             this.allLoaded = true;
@@ -113,12 +112,12 @@ export default {
           console.error(e.toString());
         }
       }
-    },
+    }
   },
   components: {
     Header,
     FilterOptions,
-    CardsListView,
-  },
+    CardsListView
+  }
 };
 </script>

@@ -5,7 +5,7 @@ const POKE_API_BASE_URL =
 
 function createCall(query) {
   return axios.post(POKE_API_BASE_URL, {
-    query,
+    query
   });
 }
 
@@ -14,7 +14,7 @@ export async function getPokes({
   offset = 0,
   isSearch = false,
   isFavorites = false,
-  isType = false,
+  isType = false
 }) {
   const res = await createCall(
     queries.getPokes({ limit, offset, isSearch, isType, isFavorites })

@@ -1,4 +1,4 @@
-export const useIsScrolledToBottom = (w) => {
+export const useIsScrolledToBottom = w => {
   return (
     Math.max(
       w.pageYOffset,

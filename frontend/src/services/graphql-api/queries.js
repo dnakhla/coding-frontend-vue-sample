@@ -5,7 +5,7 @@ export default {
     offset = 0,
     isFavorites = false,
     isSearch = false,
-    isType = false,
+    isType = false
   }) => {
     let filters = "";
     let search = "";
@@ -70,5 +70,5 @@ export default {
               ${simpleDataFields.join("\n")}
             }
           }`;
-  },
+  }
 };
