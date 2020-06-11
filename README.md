@@ -2,7 +2,7 @@
 
 This repository contains the coding exercise requested for evaluation using Vue.
 
-## Here is what I build
+## Here is what I built
 
 A demo video can be found in the example folder in the root of the directory as `demo.mp4` and here https://youtu.be/gevHu0oSmlM
 
