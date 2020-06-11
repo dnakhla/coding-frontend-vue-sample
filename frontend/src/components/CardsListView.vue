@@ -1,18 +1,23 @@
 <template>
   <div>
-    <ul id="example-1">
+    <ul :class="{ isList: !isGrid }">
       <div v-if="(list || []).length == 0">
         <span>0 results</span>
       </div>
       <li v-for="poke in list" :key="poke.id">
-        <router-link :to="poke.name">
-          <div>
+        <div>
+          <router-link :to="poke.name">
             <img loading="lazy" :src="poke.image" style="width:100px" />
-            {{ poke.name }}
-            <p>fav:{{ poke.isFavorite }}</p>
-            <p>types:{{ poke.types }}</p>
-          </div>
-        </router-link>
+          </router-link>
+          {{ poke.name }}
+          <button
+            @click="!poke.isFavorite ? onFav(poke.id) : onRemoveFav(poke.id)"
+          >
+            fav:{{ poke.isFavorite ? "❤️" : "💔" }}
+          </button>
+          <p>{{ poke.id }}</p>
+          <p>types:{{ poke.types }}</p>
+        </div>
       </li>
       <li v-if="allLoaded">
         <div>
@@ -30,6 +35,10 @@ ul {
   margin: 0;
   display: grid;
   grid-template-columns: auto auto auto;
+  &.isList {
+    display: flex;
+    flex-wrap: wrap;
+  }
   li {
     display: grid;
     width: 100%;
@@ -45,7 +54,10 @@ ul {
 export default {
   props: {
     list: Array,
+    isGrid: Boolean,
     allLoaded: Boolean,
+    onFav: Function,
+    onRemoveFav: Function,
   },
 };
 </script>

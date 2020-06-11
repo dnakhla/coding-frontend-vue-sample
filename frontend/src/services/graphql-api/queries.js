@@ -10,7 +10,7 @@ export default {
     let filters = "";
     let search = "";
     if (isFavorites || isType) {
-      let favsub = isFavorites ? "isFavorites: true" : "";
+      let favsub = isFavorites ? "isFavorite: true" : "";
       let typesub = isType ? `type: "${isType}" ` : "";
       filters = `filter: { 
           ${typesub}
@@ -34,6 +34,23 @@ export default {
     return `{
             poke:pokemonByName(name: "${name}") {
                ${simpleDataFields.join("\n")}
+                  sound
+                  weight {
+                    minimum
+                    maximum
+                  }
+                  height {
+                    minimum
+                    maximum
+                  }
+                  maxHP
+                  maxCP
+                  evolutions {
+                    id
+                    name
+                    image
+                    isFavorite
+                  }
             }
           }`;
   },

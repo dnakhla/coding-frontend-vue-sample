@@ -9,9 +9,12 @@
     />
     <transition name="slide" mode="out-in" appear>
       <CardsListView
-        @scroll="handleScroll"
+        :isGrid="isGrid"
         :list="list"
         :allLoaded="allLoaded"
+        :onFav="handleFav"
+        :onRemoveFav="handleRemoveFav"
+        @scroll="handleScroll"
       />
     </transition>
   </div>
@@ -20,7 +23,11 @@
 <script>
 const NEW_CALL_COUNT = 18;
 import { Header, FilterOptions, CardsListView } from "@/components/";
-import { getPokes, getFavorites } from "@/services/graphql-api/api";
+import {
+  getPokes,
+  favoritePoke,
+  removeFavoritePoke,
+} from "@/services/graphql-api/api";
 import { useIsScrolledToBottom } from "@/util";
 
 export default {
@@ -48,10 +55,7 @@ export default {
   watch: {
     tab: async function(val) {
       this.pageindex = 0;
-      this.list = this.runQuery();
-    },
-    searchTerm: function(val) {
-      console.log(val);
+      this.list = await this.runQuery();
     },
   },
   methods: {
@@ -80,6 +84,14 @@ export default {
     //@TOOD turn to mixin
     toggleMainTab: async function() {
       this.tab = this.tab == "all" ? "favorites" : "all";
+    },
+    handleFav: async function(pokeId) {
+      await favoritePoke(pokeId);
+      this.list = await this.runQuery();
+    },
+    handleRemoveFav: async function(pokeId) {
+      await removeFavoritePoke(pokeId);
+      this.list = await this.runQuery();
     },
     handleScroll: async function() {
       // need to debounce this
