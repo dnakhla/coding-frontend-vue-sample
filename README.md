@@ -53,7 +53,7 @@ While incomplete, to run the frontend end-to-end tests:
 ```
 $ cd frontend
 $ npm install
-$ npm run serve
+$ npm run test:e2e
 ```
 
 Access the application at http://localhost:8080/.
