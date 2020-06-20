@@ -5,12 +5,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    list: [],
-    currentTab: "all",
-    searchQuery: false,
+    isLoading: true,
+    errorMsg: false,
+    tab: "all",
+    searchquery: false,
     isGrid: true,
-    typeQuery: false,
+    typequery: false,
     pageindex: 0,
+    list: null,
+    allLoaded: false,
   },
   mutations: {},
   actions: {},

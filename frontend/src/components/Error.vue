@@ -44,6 +44,7 @@ div.isError {
     code {
       background: lightcoral;
       font-size: 3rem;
+      line-height: 2rem;
       padding: 1rem;
     }
   }

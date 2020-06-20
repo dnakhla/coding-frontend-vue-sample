@@ -1,12 +1,3 @@
-export const useIsScrolledToBottom = w => {
-  const scrollY = w.scrollY;
-  const visible = w.document.documentElement.clientHeight;
-  const pageHeight = w.document.documentElement.scrollHeight;
-  const bottomOfPage = visible + scrollY >= pageHeight;
-
-  return bottomOfPage || pageHeight < visible;
-};
-
 export const isInViewport = function(elem) {
   var bounding = elem.getBoundingClientRect();
   return (

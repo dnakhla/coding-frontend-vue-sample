@@ -34,7 +34,7 @@ button#loadmore {
 </style>
 
 <script>
-const NEW_CALL_COUNT = 3;
+const NEW_CALL_COUNT = 9;
 import {
   Header,
   FilterOptions,
@@ -81,24 +81,26 @@ export default {
     try {
       this.list = await this.runQuery();
       //load more on scroll
-      this.isLoading = false;
       window.addEventListener("scroll", this.handleScroll);
     } catch (e) {
-      this.isLoading = false;
       this.errorMsg = e.toString();
     }
+    this.isLoading = false;
   },
 
   watch: {
-    tab: async function() {
+    async tab() {
       this.pageindex = 0;
       this.allLoaded = false;
       this.list = await this.runQuery();
     },
-    list: function() {
-      setTimeout(async () => {
-        await this.loadMore();
-      }, 0);
+    list() {
+      setTimeout(this.loadMore, 0);
+    },
+  },
+  computed: {
+    isFavorites() {
+      return this.tab == "favorites";
     },
   },
   methods: {
@@ -116,7 +118,7 @@ export default {
         offset: this.pageindex,
         isSearch: this.searchquery,
         isType: this.typequery,
-        isFavorites: this.tab == "favorites",
+        isFavorites: this.isFavorites,
       };
       console.log(opts);
       return await getPokes(opts);
@@ -146,7 +148,13 @@ export default {
     handleRemoveFav: async function(pokeId) {
       await removeFavoritePoke(pokeId);
       let updatedPoke = await getPokeByID(pokeId);
-      this.replacePokeInListWithUpdate(updatedPoke);
+      if (!this.isFavorites) {
+        this.replacePokeInListWithUpdate(updatedPoke);
+      } else {
+        this.list = this.list.filter((x) => {
+          return x.id !== pokeId;
+        });
+      }
     },
     replacePokeInListWithUpdate: function(pokeOb) {
       this.list = this.list.map((x) => {

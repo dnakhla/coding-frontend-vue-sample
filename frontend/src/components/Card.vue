@@ -87,11 +87,8 @@
   0% {
     transform: scale(1);
   }
-  50% {
-    transform: scale(0.8);
-  }
   100% {
-    transform: scale(1);
+    transform: scale(1.2);
   }
 }
 h2.title {
@@ -171,7 +168,7 @@ div.card {
         background: transparent;
         border: 0;
         &:hover {
-          animation: pulse 0.5s ease-in infinite;
+          animation: pulse 0.5s ease-in forwards;
         }
         &:focus,
         &:active {
@@ -221,7 +218,7 @@ div.card {
       bottom: 0;
       right: 0;
       &:hover {
-        animation: pulse 0.5s ease-in infinite;
+        animation: pulse 0.5s ease-in forwards;
       }
       &:active,
       &:focus {
