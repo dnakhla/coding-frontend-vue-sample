@@ -14,8 +14,8 @@
 export default {
   props: {
     errorMsg: String,
-    tryAgainHandler: Function,
-  },
+    tryAgainHandler: Function
+  }
 };
 </script>
 <style scoped lang="scss">
@@ -44,7 +44,7 @@ div.isError {
     code {
       background: lightcoral;
       font-size: 3rem;
-      line-height: 2rem;
+      line-height: 4rem;
       padding: 1rem;
     }
   }

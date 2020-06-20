@@ -62,14 +62,14 @@ ul {
 import Card from "./Card";
 export default {
   components: {
-    Card,
+    Card
   },
   props: {
     list: Array,
     isGrid: Boolean,
     allLoaded: Boolean,
     onFav: Function,
-    onRemoveFav: Function,
-  },
+    onRemoveFav: Function
+  }
 };
 </script>

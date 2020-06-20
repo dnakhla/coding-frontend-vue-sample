@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loader v-if="!mainpoke" />
     <Card
       v-if="mainpoke"
       :isDetailedView="true"
@@ -16,40 +17,40 @@ import {
   favoritePoke,
   removeFavoritePoke,
 } from "@/services/graphql-api/api";
-import { Card } from "@/components/";
+import { Card, Loader } from "@/components/";
 export default {
   name: "Details",
   components: {
     Card,
+    Loader,
   },
   data() {
     return {
       mainpoke: false,
     };
   },
-  beforeRouteEnter(to, from, next) {
-    getPokeByName(to.params.name)
-      .then((poke) => {
-        if (poke) {
-          next((vm) => {
-            vm.mainpoke = poke;
-          });
-        } else {
-          next({
-            name: "404",
-            query: { redirecturl: to.path },
-          });
-        }
-      })
-      .catch((err) => {
-        next({
-          path: "/",
-          query: {
-            redirecturl: to.path,
-            errorMsg: err.toString(),
-          },
+  async mounted() {
+    try {
+      let poke = await getPokeByName(this.$route.params.name);
+      if (poke) {
+        this.mainpoke = poke;
+      } else {
+        //404
+        this.$router.push({
+          name: "404",
+          query: { redirecturl: this.$route.path },
         });
+      }
+    } catch (err) {
+      //404
+      this.$router.push({
+        path: "/",
+        query: {
+          redirecturl: this.$route.path,
+          errorMsg: err.toString(),
+        },
       });
+    }
   },
   watch: {
     async $route(to) {
@@ -68,6 +69,5 @@ export default {
       this.mainpoke = await getPokeByName(this.$route.params.name);
     },
   },
-  async mounted() {},
 };
 </script>

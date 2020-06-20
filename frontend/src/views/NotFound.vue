@@ -2,6 +2,9 @@
   <div>
     <span>
       <h1>404</h1>
+      <router-link to="/">
+        Go To Home
+      </router-link>
     </span>
   </div>
 </template>
@@ -15,6 +18,10 @@ div {
     margin: auto;
     padding: 0;
     font-size: 4rem;
+    text-align: center;
+    a {
+      font-size: 2rem;
+    }
   }
 }
 </style>
