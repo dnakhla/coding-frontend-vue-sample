@@ -14,23 +14,49 @@
 import {
   getPokeByName,
   favoritePoke,
-  removeFavoritePoke
+  removeFavoritePoke,
 } from "@/services/graphql-api/api";
 import { Card } from "@/components/";
 export default {
   name: "Details",
   components: {
-    Card
+    Card,
   },
   data() {
     return {
-      mainpoke: false
+      mainpoke: false,
     };
+  },
+  beforeRouteEnter(to, from, next) {
+    getPokeByName(to.params.name)
+      .then((poke) => {
+        if (poke) {
+          next((vm) => {
+            vm.mainpoke = poke;
+          });
+        } else {
+          next({
+            name: "404",
+            query: { redirecturl: to.path },
+          });
+        }
+      })
+      .catch((err) => {
+        next({
+          path: "/",
+          query: {
+            redirecturl: to.path,
+            errorMsg: err.toString(),
+          },
+        });
+      });
   },
   watch: {
     async $route(to) {
-      this.mainpoke = await getPokeByName(to.params.name);
-    }
+      this.$router.go({
+        path: to.path,
+      });
+    },
   },
   methods: {
     handleFav: async function(pokeId) {
@@ -40,21 +66,8 @@ export default {
     handleRemoveFav: async function(pokeId) {
       await removeFavoritePoke(pokeId);
       this.mainpoke = await getPokeByName(this.$route.params.name);
-    }
+    },
   },
-  async mounted() {
-    try {
-      let poke = await getPokeByName(this.$route.params.name);
-      if (poke) {
-        this.mainpoke = poke;
-      } else {
-        //404
-        this.$router.push("/");
-      }
-    } catch (error) {
-      //404
-      this.$router.push("/");
-    }
-  }
+  async mounted() {},
 };
 </script>

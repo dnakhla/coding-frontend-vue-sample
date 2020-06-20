@@ -1,72 +1,125 @@
 <template>
   <div class="home">
-    <Header :tab="tab" :handleToggle="toggleMainTab" />
-    <FilterOptions
-      :isGrid="isGrid"
-      :handleSearchByType="onSearchByType"
-      :handleSearch="onSearch"
-      :handleListToggle="onListToggle"
+    <Loader v-if="isLoading" />
+    <Error
+      v-if="!isLoading && errorMsg"
+      :errorMsg="errorMsg"
+      :tryAgainHandler="refreshPage"
     />
-    <transition name="slide" mode="out-in" appear>
+    <div v-if="!isLoading && !errorMsg">
+      <Header :tab="tab" :handleToggle="toggleMainTab" />
+      <FilterOptions
+        :isGrid="isGrid"
+        :handleSearchByType="onSearchByType"
+        :handleSearch="onSearch"
+        :handleListToggle="onListToggle"
+      />
       <CardsListView
         :isGrid="isGrid"
         :list="list"
         :allLoaded="allLoaded"
         :onFav="handleFav"
         :onRemoveFav="handleRemoveFav"
-        @scroll="handleScroll"
       />
-    </transition>
+      <button v-if="!allLoaded" id="loadmore">
+        Load more
+      </button>
+    </div>
   </div>
 </template>
+<style scoped lang="scss">
+button#loadmore {
+  width: 100%;
+}
+</style>
 
 <script>
-const NEW_CALL_COUNT = 18;
-import { Header, FilterOptions, CardsListView } from "@/components/";
+const NEW_CALL_COUNT = 3;
+import {
+  Header,
+  FilterOptions,
+  CardsListView,
+  Loader,
+  Error,
+} from "@/components/";
 import {
   getPokes,
   favoritePoke,
-  removeFavoritePoke
+  removeFavoritePoke,
+  getPokeByID,
 } from "@/services/graphql-api/api";
-import { useIsScrolledToBottom } from "@/util";
+import { isInViewport } from "@/util";
 
 export default {
   name: "app",
   data() {
     return {
+      isLoading: true,
+      errorMsg: false,
       tab: "all",
       searchquery: false,
       isGrid: true,
       typequery: false,
       pageindex: 0,
       list: null,
-      allLoaded: false
+      allLoaded: false,
     };
   },
-  async created() {
+  beforeUpdate() {
+    if (this.$route.query.redirecturl && !this.errorMsg) {
+      this.$router.push({
+        path: this.$route.query.redirecturl,
+      });
+    }
+  },
+  async mounted() {
+    if (this.$route.query.errorMsg) {
+      this.isLoading = false;
+      this.errorMsg = this.$route.query.errorMsg;
+      return;
+    }
     try {
       this.list = await this.runQuery();
       //load more on scroll
+      this.isLoading = false;
       window.addEventListener("scroll", this.handleScroll);
     } catch (e) {
-      throw new Error(e.toString());
+      this.isLoading = false;
+      this.errorMsg = e.toString();
     }
   },
+
   watch: {
     tab: async function() {
       this.pageindex = 0;
+      this.allLoaded = false;
       this.list = await this.runQuery();
-    }
+    },
+    list: function() {
+      setTimeout(async () => {
+        await this.loadMore();
+      }, 0);
+    },
   },
   methods: {
+    refreshPage: function() {
+      this.isLoading = true;
+      this.errorMsg = false;
+      setTimeout(() => {
+        this.$router.go();
+      }, 100);
+    },
+
     runQuery: async function() {
-      return await getPokes({
+      let opts = {
         limit: NEW_CALL_COUNT,
         offset: this.pageindex,
         isSearch: this.searchquery,
         isType: this.typequery,
-        isFavorites: this.tab == "favorites"
-      });
+        isFavorites: this.tab == "favorites",
+      };
+      console.log(opts);
+      return await getPokes(opts);
     },
     onListToggle: async function() {
       this.isGrid = !this.isGrid;
@@ -87,15 +140,26 @@ export default {
     },
     handleFav: async function(pokeId) {
       await favoritePoke(pokeId);
-      this.list = await this.runQuery();
+      let updatedPoke = await getPokeByID(pokeId);
+      this.replacePokeInListWithUpdate(updatedPoke);
     },
     handleRemoveFav: async function(pokeId) {
       await removeFavoritePoke(pokeId);
-      this.list = await this.runQuery();
+      let updatedPoke = await getPokeByID(pokeId);
+      this.replacePokeInListWithUpdate(updatedPoke);
     },
-    handleScroll: async function() {
-      // need to debounce this
-      let bottomOfWindow = useIsScrolledToBottom(window);
+    replacePokeInListWithUpdate: function(pokeOb) {
+      this.list = this.list.map((x) => {
+        if (x.id == pokeOb.id) {
+          x = pokeOb;
+        }
+        return x;
+      });
+    },
+    loadMore: async function() {
+      var loadMoreButton = document.getElementById("loadmore");
+      let bottomOfWindow = false;
+      if (loadMoreButton) bottomOfWindow = isInViewport(loadMoreButton);
       if (bottomOfWindow) {
         try {
           this.pageindex = this.pageindex + NEW_CALL_COUNT;
@@ -103,6 +167,7 @@ export default {
           //if we have more pokes lets add them
           if (newData.length > 0) {
             this.list = [...this.list, ...newData];
+            await this.loadMore();
           } else {
             //if no data lets stop listening to the scroll
             this.allLoaded = true;
@@ -112,12 +177,18 @@ export default {
           console.error(e.toString());
         }
       }
-    }
+    },
+    handleScroll: async function() {
+      // need to debounce this
+      await this.loadMore();
+    },
   },
   components: {
     Header,
     FilterOptions,
-    CardsListView
-  }
+    CardsListView,
+    Loader,
+    Error,
+  },
 };
 </script>

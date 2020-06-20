@@ -2,7 +2,9 @@
   <div>
     <div class="gobacklink" v-if="isDetailedView">
       <router-link to="/">
-        <div>Go Back</div>
+        <div>
+          🏠Go Home
+        </div>
       </router-link>
     </div>
     <div
@@ -10,7 +12,7 @@
         card: true,
         detailedview: isDetailedView,
         isList: isList,
-        isFav: poke.isFavorite
+        isFav: poke.isFavorite,
       }"
       :data-id="poke.id"
       v-if="poke"
@@ -37,20 +39,20 @@
         <router-link :to="poke.name">
           <img
             :class="{
-              detailedview: isDetailedView
+              detailedview: isDetailedView,
             }"
             loading="lazy"
             :src="poke.image"
           />
         </router-link>
-        <span @click="playPokeSound(poke)" v-if="isDetailedView">
+        <span @click.stop.prevent="playPokeSound(poke)" v-if="isDetailedView">
           <p className="soundIcon">🔊</p>
         </span>
       </div>
       <div
         class="bottom"
         :class="{
-          detailedview: isDetailedView
+          detailedview: isDetailedView,
         }"
       >
         <router-link :to="poke.name">
@@ -72,6 +74,8 @@
           v-for="item in poke.evolutions"
           v-bind:poke="item"
           v-bind:key="item.id"
+          :onFav="onFav"
+          :onRemoveFav="onRemoveFav"
         />
       </div>
     </div>
@@ -237,13 +241,13 @@ export default {
     onFav: Function,
     onRemoveFav: Function,
     isDetailedView: Boolean,
-    isList: Boolean
+    isList: Boolean,
   },
   methods: {
-    playPokeSound: poke => {
+    playPokeSound: (poke) => {
       let audio = new Audio(poke.sound); // path to file
       audio.play();
-    }
-  }
+    },
+  },
 };
 </script>

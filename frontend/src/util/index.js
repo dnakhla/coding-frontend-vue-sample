@@ -1,11 +1,20 @@
 export const useIsScrolledToBottom = w => {
+  const scrollY = w.scrollY;
+  const visible = w.document.documentElement.clientHeight;
+  const pageHeight = w.document.documentElement.scrollHeight;
+  const bottomOfPage = visible + scrollY >= pageHeight;
+
+  return bottomOfPage || pageHeight < visible;
+};
+
+export const isInViewport = function(elem) {
+  var bounding = elem.getBoundingClientRect();
   return (
-    Math.max(
-      w.pageYOffset,
-      w.document.documentElement.scrollTop,
-      w.document.body.scrollTop
-    ) +
-      w.innerHeight ===
-    w.document.documentElement.offsetHeight
+    bounding.top >= 0 &&
+    bounding.left >= 0 &&
+    bounding.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
+    bounding.right <=
+      (window.innerWidth || document.documentElement.clientWidth)
   );
 };
