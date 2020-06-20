@@ -220,6 +220,7 @@ export default {
         await favoritePoke(pokeId);
         let updatedPoke = await getPokeByID(pokeId);
         this.replacePokeInListWithUpdate(updatedPoke);
+        this.$toast.open(updatedPoke.name + " Added to Favs!");
       } catch (e) {
         this.updateErrMessage(e.toString());
       }
@@ -228,6 +229,10 @@ export default {
       try {
         await removeFavoritePoke(pokeId);
         let updatedPoke = await getPokeByID(pokeId);
+        this.$toast.open({
+          message: updatedPoke.name + " removed from Favs!",
+          type: "error",
+        });
         if (!this.isFavorites) {
           this.replacePokeInListWithUpdate(updatedPoke);
         } else {
