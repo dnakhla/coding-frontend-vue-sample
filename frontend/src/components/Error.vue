@@ -11,6 +11,33 @@
 </template>
 
 <script>
+export const errorStateMixin = {
+  data() {
+    return {
+      state: {
+        errorMsg: false
+      }
+    };
+  },
+  beforeUpdate() {
+    if (this.$route.query.redirecturl && !this.state.errorMsg) {
+      this.$router.push({
+        path: this.$route.query.redirecturl
+      });
+    }
+  },
+  methods: {
+    updateErrMessage: function(message) {
+      this.state.errorMsg = message;
+    },
+    defaultErrPageHandler: function() {
+      setTimeout(() => {
+        this.$router.go();
+      }, 100);
+    }
+  }
+};
+
 export default {
   props: {
     errorMsg: String,

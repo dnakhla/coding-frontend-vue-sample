@@ -1,6 +1,11 @@
 <template>
   <div>
     <Loader v-if="!mainpoke" />
+    <Error
+      v-if="!mainpoke && state.errorMsg"
+      :errorMsg="state.errorMsg"
+      :tryAgainHandler="defaultErrPageHandler"
+    />
     <Card
       v-if="mainpoke"
       :isDetailedView="true"
@@ -12,18 +17,19 @@
 </template>
 
 <script>
-import {
-  getPokeByName,
-  favoritePoke,
-  removeFavoritePoke,
-} from "@/services/graphql-api/api";
-import { Card, Loader } from "@/components/";
+import { getPokeByName } from "@/services/graphql-api/api";
+import { Card, Error, Loader } from "@/components/";
+import { pokeActionsMixin } from "@/util/mixins";
+import { errorStateMixin } from "@/components/Error";
+
 export default {
   name: "Details",
   components: {
     Card,
     Loader,
+    Error,
   },
+  mixins: [pokeActionsMixin, errorStateMixin],
   data() {
     return {
       mainpoke: false,
@@ -61,12 +67,10 @@ export default {
   },
   methods: {
     handleFav: async function(pokeId) {
-      await favoritePoke(pokeId);
-      this.mainpoke = await getPokeByName(this.$route.params.name);
+      this.mainpoke = await this.handleFavorite(pokeId);
     },
     handleRemoveFav: async function(pokeId) {
-      await removeFavoritePoke(pokeId);
-      this.mainpoke = await getPokeByName(this.$route.params.name);
+      this.mainpoke = await this.handleRemoveFavorite(pokeId);
     },
   },
 };

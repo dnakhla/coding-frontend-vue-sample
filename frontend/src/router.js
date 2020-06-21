@@ -10,18 +10,18 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: () => import("@/views/Home.vue"),
+      component: () => import("@/views/Home.vue")
     },
     {
       path: "/:name",
       name: "details",
-      component: () => import("@/views/Detail.vue"),
+      component: () => import("@/views/Detail.vue")
     },
     {
       path: "/404",
       name: "404",
-      component: () => import("@/views/NotFound.vue"),
-    },
+      component: () => import("@/views/NotFound.vue")
+    }
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
@@ -29,5 +29,5 @@ export default new Router({
     } else {
       return { x: 0, y: 0 };
     }
-  },
+  }
 });

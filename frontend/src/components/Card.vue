@@ -12,7 +12,7 @@
         card: true,
         detailedview: isDetailedView,
         isList: isList,
-        isFav: poke.isFavorite
+        isFav: poke.isFavorite,
       }"
       :data-id="poke.id"
       v-if="poke"
@@ -39,7 +39,7 @@
         <router-link :to="poke.name">
           <img
             :class="{
-              detailedview: isDetailedView
+              detailedview: isDetailedView,
             }"
             loading="lazy"
             :src="poke.image"
@@ -52,15 +52,16 @@
       <div
         class="bottom"
         :class="{
-          detailedview: isDetailedView
+          detailedview: isDetailedView,
         }"
       >
         <router-link :to="poke.name">
           <h2>{{ poke.name }}</h2>
         </router-link>
         <button
+          v-if="onFav"
           class="favButton"
-          @click="!poke.isFavorite ? onFav(poke.id) : onRemoveFav(poke.id)"
+          @click.stop="!poke.isFavorite ? onFav(poke.id) : onRemoveFav(poke.id)"
         >
           {{ poke.isFavorite ? "❤️" : "💔" }}
         </button>
@@ -74,8 +75,6 @@
           v-for="item in poke.evolutions"
           v-bind:poke="item"
           v-bind:key="item.id"
-          :onFav="onFav"
-          :onRemoveFav="onRemoveFav"
         />
       </div>
     </div>
@@ -138,7 +137,7 @@ div.card {
   a {
     margin: auto;
     text-decoration: none;
-    display: flex;
+    display: inline-flex;
   }
 
   div.detailedBottom {
@@ -238,13 +237,13 @@ export default {
     onFav: Function,
     onRemoveFav: Function,
     isDetailedView: Boolean,
-    isList: Boolean
+    isList: Boolean,
   },
   methods: {
-    playPokeSound: poke => {
+    playPokeSound: (poke) => {
       let audio = new Audio(poke.sound); // path to file
       audio.play();
-    }
-  }
+    },
+  },
 };
 </script>
