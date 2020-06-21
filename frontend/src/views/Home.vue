@@ -71,14 +71,14 @@ import {
   FilterOptions,
   CardsListView,
   Loader,
-  Error
+  Error,
 } from "@/components/";
 import { getPokes } from "@/services/graphql-api/api";
 import {
   cacheMixin,
   pokeActionsMixin,
   navigationMixin,
-  infiniteScrollMixin
+  infiniteScrollMixin,
 } from "@/util/mixins";
 import { errorStateMixin } from "@/components/Error";
 import { isLoadingMixin } from "@/components/Loader";
@@ -89,7 +89,7 @@ export default {
     FilterOptions,
     CardsListView,
     Loader,
-    Error
+    Error,
   },
   mixins: [
     navigationMixin,
@@ -97,15 +97,15 @@ export default {
     errorStateMixin,
     cacheMixin,
     isLoadingMixin,
-    infiniteScrollMixin(NEW_CALL_COUNT, "loadmorebutton")
+    infiniteScrollMixin(NEW_CALL_COUNT, "loadmorebutton"),
   ],
   data() {
     return {
       state: {
         pageindex: 0,
         list: [],
-        allLoaded: false
-      }
+        allLoaded: false,
+      },
     };
   },
   async mounted() {
@@ -136,12 +136,12 @@ export default {
     list() {
       this.state.allLoaded = false;
       setTimeout(this.loadMore, 0);
-    }
+    },
   },
   computed: {
     list() {
       return this.state.list;
-    }
+    },
   },
   methods: {
     async toggleMainTab() {
@@ -172,9 +172,8 @@ export default {
         offset: this.state.pageindex,
         isSearch: this.state.searchquery,
         isType: this.state.typequery,
-        isFavorites: this.isFavorites
+        isFavorites: this.isFavorites,
       };
-      console.log(opts);
       this.updateIsLoading(true);
       let r = await getPokes(opts);
       this.updateIsLoading(false);
@@ -194,18 +193,18 @@ export default {
     },
     async replacePokeInListWithUpdate(pokeOb) {
       if (!this.isFavorites) {
-        this.state.list = this.state.list.map(x => {
+        this.state.list = this.state.list.map((x) => {
           if (x.id == pokeOb.id) {
             x = pokeOb;
           }
           return x;
         });
       } else {
-        this.state.list = this.state.list.filter(x => {
+        this.state.list = this.state.list.filter((x) => {
           return x.id !== pokeOb.id;
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
