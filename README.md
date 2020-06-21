@@ -2,7 +2,7 @@
 
 This repository contains the coding exercise requested for evaluation using Vue.
 
-## Changelog and Updates made -
+### Changelog / Updates made: https://www.youtube.com/watch?v=qn-l7fq9QKA
 
 - ✅ Update to include Loading States and Error States
 - ✅ Adding 404 page for missing or not found Pokes

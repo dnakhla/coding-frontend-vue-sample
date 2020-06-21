@@ -118,7 +118,7 @@ export const pokeActionsMixin = {
       try {
         await favoritePoke(pokeId);
         let updatedPoke = await getPokeByID(pokeId);
-        this.$toast.open(updatedPoke.name + " Added to Favs!");
+        this.$toast.open(updatedPoke.name + " added to Favorites!");
         return updatedPoke;
       } catch (e) {
         this.updateErrMessage(e.toString());
@@ -129,7 +129,7 @@ export const pokeActionsMixin = {
         await removeFavoritePoke(pokeId);
         let updatedPoke = await getPokeByID(pokeId);
         this.$toast.open({
-          message: updatedPoke.name + " removed from Favs!",
+          message: updatedPoke.name + " removed from Favorites!",
           type: "error",
         });
         return updatedPoke;
