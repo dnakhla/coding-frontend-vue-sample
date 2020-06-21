@@ -18,6 +18,7 @@ describe("The Home Page", () => {
 describe("Home page", () => {
   it("checks the top tabs for change", () => {
     cy.visit("/");
+    cy.get("button.favButton:first").click();
     cy.contains("Favorites").click();
     cy.get(".card").each($el => {
       cy.get($el).should("have.class", "isFav");
@@ -32,6 +33,7 @@ describe("Home page", () => {
       .type("Rattata")
       .should("have.value", "Rattata");
     cy.get("form").submit();
+    cy.wait(2000);
     cy.get(".card h2").should("have.text", "Rattata");
   });
 });

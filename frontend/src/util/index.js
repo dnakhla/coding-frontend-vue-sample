@@ -1,11 +1,11 @@
-export const useIsScrolledToBottom = w => {
+export const isInViewport = function(elem) {
+  var bounding = elem.getBoundingClientRect();
   return (
-    Math.max(
-      w.pageYOffset,
-      w.document.documentElement.scrollTop,
-      w.document.body.scrollTop
-    ) +
-      w.innerHeight ===
-    w.document.documentElement.offsetHeight
+    bounding.top >= 0 &&
+    bounding.left >= 0 &&
+    bounding.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
+    bounding.right <=
+      (window.innerWidth || document.documentElement.clientWidth)
   );
 };

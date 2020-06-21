@@ -54,6 +54,30 @@ export default {
             }
           }`;
   },
+  getPokeByID: ({ id }) => {
+    return `{
+            poke:pokemonById(id: "${id}") {
+               ${simpleDataFields.join("\n")}
+                  sound
+                  weight {
+                    minimum
+                    maximum
+                  }
+                  height {
+                    minimum
+                    maximum
+                  }
+                  maxHP
+                  maxCP
+                  evolutions {
+                    id
+                    name
+                    image
+                    isFavorite
+                  }
+            }
+          }`;
+  },
   getPokeTypes: () => {
     return `{types:pokemonTypes}`;
   },

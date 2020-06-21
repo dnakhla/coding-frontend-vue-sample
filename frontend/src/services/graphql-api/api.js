@@ -28,6 +28,11 @@ export async function getPokeByName(name) {
   return res.data.data.poke;
 }
 
+export async function getPokeByID(id) {
+  const res = await createCall(queries.getPokeByID({ id }));
+  return res.data.data.poke;
+}
+
 export async function getPokeTypes() {
   const res = await createCall(queries.getPokeTypes());
   let { types } = res.data.data;

@@ -20,4 +20,18 @@ html {
   max-width: 600px;
   margin: auto;
 }
+.notices {
+  font-size: 2rem;
+}
 </style>
+
+<script>
+import Vue from "vue";
+import VueToast from "vue-toast-notification";
+// Import one of available themes
+import "vue-toast-notification/dist/theme-sugar.css";
+Vue.use(VueToast, {
+  position: "bottom"
+});
+export default {};
+</script>

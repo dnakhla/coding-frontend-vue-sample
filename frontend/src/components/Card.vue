@@ -2,7 +2,9 @@
   <div>
     <div class="gobacklink" v-if="isDetailedView">
       <router-link to="/">
-        <div>Go Back</div>
+        <div>
+          🏠Go Home
+        </div>
       </router-link>
     </div>
     <div
@@ -10,7 +12,7 @@
         card: true,
         detailedview: isDetailedView,
         isList: isList,
-        isFav: poke.isFavorite
+        isFav: poke.isFavorite,
       }"
       :data-id="poke.id"
       v-if="poke"
@@ -37,28 +39,29 @@
         <router-link :to="poke.name">
           <img
             :class="{
-              detailedview: isDetailedView
+              detailedview: isDetailedView,
             }"
             loading="lazy"
             :src="poke.image"
           />
         </router-link>
-        <span @click="playPokeSound(poke)" v-if="isDetailedView">
+        <span @click.stop.prevent="playPokeSound(poke)" v-if="isDetailedView">
           <p className="soundIcon">🔊</p>
         </span>
       </div>
       <div
         class="bottom"
         :class="{
-          detailedview: isDetailedView
+          detailedview: isDetailedView,
         }"
       >
         <router-link :to="poke.name">
           <h2>{{ poke.name }}</h2>
         </router-link>
         <button
+          v-if="onFav"
           class="favButton"
-          @click="!poke.isFavorite ? onFav(poke.id) : onRemoveFav(poke.id)"
+          @click.stop="!poke.isFavorite ? onFav(poke.id) : onRemoveFav(poke.id)"
         >
           {{ poke.isFavorite ? "❤️" : "💔" }}
         </button>
@@ -83,11 +86,8 @@
   0% {
     transform: scale(1);
   }
-  50% {
-    transform: scale(0.8);
-  }
   100% {
-    transform: scale(1);
+    transform: scale(1.2);
   }
 }
 h2.title {
@@ -137,7 +137,7 @@ div.card {
   a {
     margin: auto;
     text-decoration: none;
-    display: flex;
+    display: inline-flex;
   }
 
   div.detailedBottom {
@@ -167,7 +167,7 @@ div.card {
         background: transparent;
         border: 0;
         &:hover {
-          animation: pulse 0.5s ease-in infinite;
+          animation: pulse 0.5s ease-in forwards;
         }
         &:focus,
         &:active {
@@ -217,7 +217,7 @@ div.card {
       bottom: 0;
       right: 0;
       &:hover {
-        animation: pulse 0.5s ease-in infinite;
+        animation: pulse 0.5s ease-in forwards;
       }
       &:active,
       &:focus {
@@ -237,13 +237,13 @@ export default {
     onFav: Function,
     onRemoveFav: Function,
     isDetailedView: Boolean,
-    isList: Boolean
+    isList: Boolean,
   },
   methods: {
-    playPokeSound: poke => {
+    playPokeSound: (poke) => {
       let audio = new Audio(poke.sound); // path to file
       audio.play();
-    }
-  }
+    },
+  },
 };
 </script>

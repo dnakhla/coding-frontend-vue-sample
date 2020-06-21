@@ -12,8 +12,8 @@
           :poke="poke"
         />
       </li>
-      <li v-if="allLoaded">
-        <div class="nomore">
+      <li class="nomore" v-if="allLoaded">
+        <div>
           <div>
             <p>
               End of List
@@ -44,8 +44,9 @@ ul {
       width: 100%;
     }
   }
-  li {
-    div.nomore {
+  li.nomore {
+    grid-column: 1/-1;
+    div {
       display: flex;
       height: 100%;
       div {

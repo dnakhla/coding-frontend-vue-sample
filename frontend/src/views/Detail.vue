@@ -1,5 +1,11 @@
 <template>
   <div>
+    <Loader v-if="!mainpoke" />
+    <Error
+      v-if="!mainpoke && state.errorMsg"
+      :errorMsg="state.errorMsg"
+      :tryAgainHandler="defaultErrPageHandler"
+    />
     <Card
       v-if="mainpoke"
       :isDetailedView="true"
@@ -11,36 +17,23 @@
 </template>
 
 <script>
-import {
-  getPokeByName,
-  favoritePoke,
-  removeFavoritePoke
-} from "@/services/graphql-api/api";
-import { Card } from "@/components/";
+import { getPokeByName } from "@/services/graphql-api/api";
+import { Card, Error, Loader } from "@/components/";
+import { pokeActionsMixin } from "@/util/mixins";
+import { errorStateMixin } from "@/components/Error";
+
 export default {
   name: "Details",
   components: {
-    Card
+    Card,
+    Loader,
+    Error,
   },
+  mixins: [pokeActionsMixin, errorStateMixin],
   data() {
     return {
-      mainpoke: false
+      mainpoke: false,
     };
-  },
-  watch: {
-    async $route(to) {
-      this.mainpoke = await getPokeByName(to.params.name);
-    }
-  },
-  methods: {
-    handleFav: async function(pokeId) {
-      await favoritePoke(pokeId);
-      this.mainpoke = await getPokeByName(this.$route.params.name);
-    },
-    handleRemoveFav: async function(pokeId) {
-      await removeFavoritePoke(pokeId);
-      this.mainpoke = await getPokeByName(this.$route.params.name);
-    }
   },
   async mounted() {
     try {
@@ -49,12 +42,36 @@ export default {
         this.mainpoke = poke;
       } else {
         //404
-        this.$router.push("/");
+        this.$router.push({
+          name: "404",
+          query: { redirecturl: this.$route.path },
+        });
       }
-    } catch (error) {
+    } catch (err) {
       //404
-      this.$router.push("/");
+      this.$router.push({
+        path: "/",
+        query: {
+          redirecturl: this.$route.path,
+          errorMsg: err.toString(),
+        },
+      });
     }
-  }
+  },
+  watch: {
+    async $route(to) {
+      this.$router.go({
+        path: to.path,
+      });
+    },
+  },
+  methods: {
+    handleFav: async function(pokeId) {
+      this.mainpoke = await this.handleFavorite(pokeId);
+    },
+    handleRemoveFav: async function(pokeId) {
+      this.mainpoke = await this.handleRemoveFavorite(pokeId);
+    },
+  },
 };
 </script>

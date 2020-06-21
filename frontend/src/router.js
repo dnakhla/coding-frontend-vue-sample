@@ -16,6 +16,18 @@ export default new Router({
       path: "/:name",
       name: "details",
       component: () => import("@/views/Detail.vue")
+    },
+    {
+      path: "/404",
+      name: "404",
+      component: () => import("@/views/NotFound.vue")
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { x: 0, y: 0 };
+    }
+  }
 });
