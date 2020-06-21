@@ -52,15 +52,15 @@ export const isLoadingMixin = {
   data() {
     return {
       state: {
-        isLoading: true,
-      },
+        isLoading: true
+      }
     };
   },
   methods: {
     updateIsLoading: function(isLoading) {
       this.state.isLoading = isLoading;
-    },
-  },
+    }
+  }
 };
 export default {};
 </script>

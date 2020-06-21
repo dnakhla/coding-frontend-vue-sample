@@ -27,12 +27,12 @@ export default {
   components: {
     Card,
     Loader,
-    Error,
+    Error
   },
   mixins: [pokeActionsMixin, errorStateMixin],
   data() {
     return {
-      mainpoke: false,
+      mainpoke: false
     };
   },
   async mounted() {
@@ -44,7 +44,7 @@ export default {
         //404
         this.$router.push({
           name: "404",
-          query: { redirecturl: this.$route.path },
+          query: { redirecturl: this.$route.path }
         });
       }
     } catch (err) {
@@ -53,17 +53,17 @@ export default {
         path: "/",
         query: {
           redirecturl: this.$route.path,
-          errorMsg: err.toString(),
-        },
+          errorMsg: err.toString()
+        }
       });
     }
   },
   watch: {
     async $route(to) {
       this.$router.go({
-        path: to.path,
+        path: to.path
       });
-    },
+    }
   },
   methods: {
     handleFav: async function(pokeId) {
@@ -71,7 +71,7 @@ export default {
     },
     handleRemoveFav: async function(pokeId) {
       this.mainpoke = await this.handleRemoveFavorite(pokeId);
-    },
-  },
+    }
+  }
 };
 </script>

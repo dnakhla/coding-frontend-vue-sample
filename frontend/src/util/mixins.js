@@ -2,7 +2,7 @@ import {
   favoritePoke,
   removeFavoritePoke,
   getPokeByID,
-  getPokeTypes,
+  getPokeTypes
 } from "@/services/graphql-api/api";
 import { isInViewport } from "@/util";
 
@@ -37,8 +37,8 @@ export const infiniteScrollMixin = (NEW_CALL_COUNT, el) => {
       },
       async handleScroll() {
         await this.loadMore();
-      },
-    },
+      }
+    }
   };
 };
 
@@ -50,8 +50,8 @@ export const navigationMixin = {
         searchquery: "",
         pokeTypes: [],
         isGrid: true,
-        typequery: false,
-      },
+        typequery: false
+      }
     };
   },
   async mounted() {
@@ -62,7 +62,7 @@ export const navigationMixin = {
   computed: {
     isFavorites() {
       return this.state.tab == "favorites";
-    },
+    }
   },
   methods: {
     toggleIsGrid() {
@@ -74,8 +74,8 @@ export const navigationMixin = {
     },
     toggleFavTab() {
       this.state.tab = this.state.tab == "all" ? "favorites" : "all";
-    },
-  },
+    }
+  }
 };
 
 export const cacheMixin = {
@@ -98,7 +98,7 @@ export const cacheMixin = {
             ...this.state,
             isLoading: false,
             pageindex: 0,
-            allLoaded: false,
+            allLoaded: false
           })
         );
       }
@@ -108,8 +108,8 @@ export const cacheMixin = {
         return JSON.parse(localStorage.getItem("stateCache"));
       }
       return false;
-    },
-  },
+    }
+  }
 };
 
 export const pokeActionsMixin = {
@@ -130,12 +130,12 @@ export const pokeActionsMixin = {
         let updatedPoke = await getPokeByID(pokeId);
         this.$toast.open({
           message: updatedPoke.name + " removed from Favorites!",
-          type: "error",
+          type: "error"
         });
         return updatedPoke;
       } catch (e) {
         this.updateErrMessage(e.toString());
       }
-    },
-  },
+    }
+  }
 };
